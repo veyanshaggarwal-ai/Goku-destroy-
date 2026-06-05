@@ -2,7 +2,6 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Goku Destroy V2</title>
 
 <style>
 body{
@@ -12,33 +11,57 @@ background:skyblue;
 touch-action:none;
 }
 
-#player{
-position:absolute;
-left:100px;
-top:300px;
-width:90px;
-height:90px;
+#health{
+position:fixed;
+top:10px;
+left:10px;
+background:red;
+color:white;
+padding:10px;
+border-radius:10px;
+font-weight:bold;
+z-index:10;
+}
+
+#score{
+position:fixed;
+top:10px;
+right:10px;
+background:black;
+color:white;
+padding:10px;
+border-radius:10px;
+font-weight:bold;
+z-index:10;
 }
 
 #ground{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
-height:60px;
+height:100px;
 background:green;
+}
+
+#player{
+position:absolute;
+left:100px;
+bottom:100px;
+width:100px;
+height:auto;
 }
 
 .controls{
 position:fixed;
-bottom:70px;
+bottom:120px;
 width:100%;
 text-align:center;
 }
 
 button{
-font-size:30px;
-padding:15px;
+width:80px;
+height:80px;
+font-size:35px;
 margin:5px;
 }
 </style>
@@ -46,14 +69,17 @@ margin:5px;
 
 <body>
 
-<img id="player" src="IMG_20260605_183231.jpg">
+<div id="health">❤️ 100</div>
+<div id="score">🏆 0</div>
+
+<img id="player" src="IMG_20260605_165941.jpg">
 
 <div id="ground"></div>
 
 <div class="controls">
-<button id="leftBtn">⬅️</button>
-<button id="jumpBtn">⬆️</button>
-<button id="rightBtn">➡️</button>
+<button id="left">⬅️</button>
+<button id="jump">⬆️</button>
+<button id="right">➡️</button>
 </div>
 
 <script>
@@ -61,67 +87,88 @@ margin:5px;
 let player=document.getElementById("player");
 
 let x=100;
-let y=300;
-
-let velocityY=0;
-let gravity=0.8;
+let y=100;
 
 let moveLeft=false;
 let moveRight=false;
+let jumping=false;
 
-let onGround=true;
+function startLeft(){
+moveLeft=true;
+}
 
-function gameLoop(){
+function stopLeft(){
+moveLeft=false;
+}
+
+function startRight(){
+moveRight=true;
+}
+
+function stopRight(){
+moveRight=false;
+}
+
+function jump(){
+
+if(jumping) return;
+
+jumping=true;
+
+let up=setInterval(()=>{
+
+y+=10;
+player.style.bottom=y+"px";
+
+if(y>=250){
+
+clearInterval(up);
+
+let down=setInterval(()=>{
+
+y-=10;
+player.style.bottom=y+"px";
+
+if(y<=100){
+
+clearInterval(down);
+jumping=false;
+
+}
+
+},20);
+
+}
+
+},20);
+
+}
+
+setInterval(()=>{
 
 if(moveLeft){
-x-=4;
+
+x-=5;
+player.style.left=x+"px";
+
 }
 
 if(moveRight){
-x+=4;
-}
 
-velocityY+=gravity;
-y+=velocityY;
-
-if(y>300){
-y=300;
-velocityY=0;
-onGround=true;
-}
-
+x+=5;
 player.style.left=x+"px";
-player.style.top=y+"px";
 
-requestAnimationFrame(gameLoop);
 }
 
-gameLoop();
+},16);
 
-document.getElementById("leftBtn").ontouchstart=()=>{
-moveLeft=true;
-};
+document.getElementById("left").addEventListener("touchstart",startLeft);
+document.getElementById("left").addEventListener("touchend",stopLeft);
 
-document.getElementById("leftBtn").ontouchend=()=>{
-moveLeft=false;
-};
+document.getElementById("right").addEventListener("touchstart",startRight);
+document.getElementById("right").addEventListener("touchend",stopRight);
 
-document.getElementById("rightBtn").ontouchstart=()=>{
-moveRight=true;
-};
-
-document.getElementById("rightBtn").ontouchend=()=>{
-moveRight=false;
-};
-
-document.getElementById("jumpBtn").onclick=()=>{
-
-if(onGround){
-velocityY=-15;
-onGround=false;
-}
-
-};
+document.getElementById("jump").addEventListener("click",jump);
 
 </script>
 
