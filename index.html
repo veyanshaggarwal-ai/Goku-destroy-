@@ -16,28 +16,25 @@ left:100px;
 top:250px;
 border-radius:10px;
 }
-</style></head><body><div id="goku"></div><script>
+
+.controls{
+position:fixed;
+bottom:20px;
+left:20px;
+}
+
+button{
+font-size:30px;
+padding:10px;
+margin:5px;
+}
+</style></head><body><div id="goku"></div><div class="controls">
+<button onclick="moveLeft()">⬅️</button>
+<button onclick="moveRight()">➡️</button>
+</div><script>
 let goku=document.getElementById("goku");
 let x=100;
 
-document.addEventListener("keydown",function(e){
-
-if(e.key=="ArrowRight"){
-x=x+20;
-goku.style.left=x+"px";
-}
-
-if(e.key=="ArrowLeft"){
-x=x-20;
-goku.style.left=x+"px";
-}
-
-});<div style="position:fixed;bottom:20px;left:20px;">
-<button onclick="moveLeft()">⬅️</button>
-<button onclick="moveRight()">➡️</button>
-</div>
-
-<script>
 function moveLeft(){
 x=x-20;
 goku.style.left=x+"px";
@@ -47,7 +44,5 @@ function moveRight(){
 x=x+20;
 goku.style.left=x+"px";
 }
-</script>
-  
 </script></body>
 </html>
