@@ -3,46 +3,87 @@
 <title>Goku Destroy</title><style>
 body{
 margin:0;
-background:skyblue;
 overflow:hidden;
+background:skyblue;
+font-family:Arial;
 }
 
-#goku{
-width:60px;
-height:60px;
-background:orange;
+#player{
 position:absolute;
 left:100px;
 top:250px;
+width:80px;
+height:80px;
+}
+
+#health{
+position:fixed;
+top:10px;
+left:10px;
+background:red;
+color:white;
+padding:10px;
 border-radius:10px;
+font-weight:bold;
+}
+
+#score{
+position:fixed;
+top:10px;
+right:10px;
+background:black;
+color:white;
+padding:10px;
+border-radius:10px;
+font-weight:bold;
 }
 
 .controls{
 position:fixed;
 bottom:20px;
-left:20px;
+width:100%;
+text-align:center;
 }
 
 button{
-font-size:30px;
-padding:10px;
+font-size:24px;
+padding:15px;
 margin:5px;
 }
-</style></head><body><div id="goku"></div><div class="controls">
-<button onclick="moveLeft()">⬅️</button>
-<button onclick="moveRight()">➡️</button>
+</style></head><body><div id="health">❤️ 100</div>
+<div id="score">🏆 0</div><img id="player" src="hero.png"><div class="controls">
+<button onclick="left()">⬅️</button>
+<button onclick="jump()">⬆️</button>
+<button onclick="right()">➡️</button>
+<button onclick="kame()">🔥</button>
 </div><script>
-let goku=document.getElementById("goku");
+let player=document.getElementById("player");
 let x=100;
+let y=250;
+let score=0;
 
-function moveLeft(){
-x=x-20;
-goku.style.left=x+"px";
+function left(){
+x-=20;
+player.style.left=x+"px";
 }
 
-function moveRight(){
-x=x+20;
-goku.style.left=x+"px";
+function right(){
+x+=20;
+player.style.left=x+"px";
+}
+
+function jump(){
+player.style.top="150px";
+
+setTimeout(()=>{
+player.style.top="250px";
+},400);
+}
+
+function kame(){
+score+=10;
+document.getElementById("score").innerHTML="🏆 "+score;
+alert("KAMEHAMEHA!");
 }
 </script></body>
 </html>
