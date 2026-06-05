@@ -16,5 +16,22 @@ left:100px;
 top:250px;
 border-radius:10px;
 }
-</style></head><body><div id="goku"></div></body>
+</style></head><body><div id="goku"></div><script>
+let goku=document.getElementById("goku");
+let x=100;
+
+document.addEventListener("keydown",function(e){
+
+if(e.key=="ArrowRight"){
+x=x+20;
+goku.style.left=x+"px";
+}
+
+if(e.key=="ArrowLeft"){
+x=x-20;
+goku.style.left=x+"px";
+}
+
+});
+</script></body>
 </html>
