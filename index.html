@@ -1,3 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Goku Destroy</title>
+
+<style>
+
+*{
+user-select:none;
+-webkit-user-select:none;
+-webkit-touch-callout:none;
+}
+
+body{
+margin:0;
+overflow:hidden;
+background:skyblue;
+touch-action:none;
+}
+
+#ground{
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:100px;
+background:green;
+}
+
+#player{
+position:absolute;
+left:100px;
+bottom:100px;
+width:120px;
+height:auto;
+}
+
+.controls{
+position:fixed;
+bottom:120px;
+width:100%;
+text-align:center;
+}
+
+button{
+width:80px;
+height:80px;
+font-size:35px;
+margin:5px;
+}
+
+</style>
+</head>
+
+<body oncontextmenu="return false;">
+
+<img id="player" src="IMG_20260605_165941.jpg">
+
+<div id="ground"></div>
+
+<div class="controls">
+<button id="left">⬅️</button>
+<button id="jump">⬆️</button>
+<button id="right">➡️</button>
+</div>
+
 <script>
 
 let player=document.getElementById("player");
@@ -8,22 +76,6 @@ let y=100;
 let moveLeft=false;
 let moveRight=false;
 let jumping=false;
-
-function startLeft(){
-moveLeft=true;
-}
-
-function stopLeft(){
-moveLeft=false;
-}
-
-function startRight(){
-moveRight=true;
-}
-
-function stopRight(){
-moveRight=false;
-}
 
 function jump(){
 
@@ -88,28 +140,30 @@ player.style.left=x+"px";
 
 },16);
 
-let leftBtn=document.getElementById("left");
-let rightBtn=document.getElementById("right");
+let left=document.getElementById("left");
+let right=document.getElementById("right");
 let jumpBtn=document.getElementById("jump");
 
-leftBtn.addEventListener("touchstart",startLeft);
-leftBtn.addEventListener("touchend",stopLeft);
-leftBtn.addEventListener("touchcancel",stopLeft);
+left.addEventListener("touchstart",()=>moveLeft=true);
+left.addEventListener("touchend",()=>moveLeft=false);
 
-rightBtn.addEventListener("touchstart",startRight);
-rightBtn.addEventListener("touchend",stopRight);
-rightBtn.addEventListener("touchcancel",stopRight);
+right.addEventListener("touchstart",()=>moveRight=true);
+right.addEventListener("touchend",()=>moveRight=false);
 
 jumpBtn.addEventListener("touchstart",jump);
 
 document.addEventListener("touchend",()=>{
-
 
 moveLeft=false;
 moveRight=false;
 
 });
 
+document.addEventListener("contextmenu",(e)=>{
+e.preventDefault();
+});
+
 </script>
 
-
+</body>
+</html>
