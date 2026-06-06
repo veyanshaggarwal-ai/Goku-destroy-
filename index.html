@@ -1,17 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Goku Destroy</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-
-*{
-user-select:none;
--webkit-user-select:none;
--webkit-touch-callout:none;
-}
 
 body{
 margin:0;
@@ -23,7 +15,6 @@ touch-action:none;
 #ground{
 position:fixed;
 bottom:0;
-left:0;
 width:100%;
 height:100px;
 background:green;
@@ -31,17 +22,20 @@ background:green;
 
 #player{
 position:absolute;
-left:100px;
+left:300px;
 bottom:100px;
 width:120px;
 height:auto;
+user-select:none;
+-webkit-user-drag:none;
 }
 
 .controls{
 position:fixed;
-bottom:120px;
+bottom:20px;
 width:100%;
 text-align:center;
+z-index:999;
 }
 
 button{
@@ -49,14 +43,16 @@ width:80px;
 height:80px;
 font-size:35px;
 margin:5px;
+touch-action:none;
+user-select:none;
 }
 
 </style>
 </head>
 
-<body oncontextmenu="return false;">
+<body>
 
-<img id="player" src="IMG_20260605_165941.jpg">
+<img id="player" src="IMG_20260605_183231.jpg">
 
 <div id="ground"></div>
 
@@ -70,12 +66,29 @@ margin:5px;
 
 let player=document.getElementById("player");
 
-let x=100;
+let x=300;
 let y=100;
 
-let moveLeft=false;
-let moveRight=false;
+let moving=false;
+let direction=0;
 let jumping=false;
+
+player.style.left=x+"px";
+player.style.bottom=y+"px";
+
+function moveLeft(){
+direction=-1;
+moving=true;
+}
+
+function moveRight(){
+direction=1;
+moving=true;
+}
+
+function stopMove(){
+moving=false;
+}
 
 function jump(){
 
@@ -99,6 +112,9 @@ player.style.bottom=y+"px";
 
 if(y<=100){
 
+y=100;
+player.style.bottom=y+"px";
+
 clearInterval(down);
 jumping=false;
 
@@ -114,21 +130,13 @@ jumping=false;
 
 setInterval(()=>{
 
-if(moveLeft){
+if(moving){
 
-x-=5;
+x+=direction*5;
 
 if(x<0){
 x=0;
 }
-
-player.style.left=x+"px";
-
-}
-
-if(moveRight){
-
-x+=5;
 
 if(x>window.innerWidth-120){
 x=window.innerWidth-120;
@@ -140,30 +148,16 @@ player.style.left=x+"px";
 
 },16);
 
-let left=document.getElementById("left");
-let right=document.getElementById("right");
-let jumpBtn=document.getElementById("jump");
+document.getElementById("left").addEventListener("touchstart",moveLeft);
+document.getElementById("left").addEventListener("touchend",stopMove);
 
-left.addEventListener("touchstart",()=>moveLeft=true);
-left.addEventListener("touchend",()=>moveLeft=false);
+document.getElementById("right").addEventListener("touchstart",moveRight);
+document.getElementById("right").addEventListener("touchend",stopMove);
 
-right.addEventListener("touchstart",()=>moveRight=true);
-right.addEventListener("touchend",()=>moveRight=false);
-
-jumpBtn.addEventListener("touchstart",jump);
-
-document.addEventListener("touchend",()=>{
-
-moveLeft=false;
-moveRight=false;
-
-});
-
-document.addEventListener("contextmenu",(e)=>{
-e.preventDefault();
-});
+document.getElementById("jump").addEventListener("click",jump);
 
 </script>
 
 </body>
 </html>
+
