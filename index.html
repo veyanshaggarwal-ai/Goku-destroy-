@@ -12,14 +12,6 @@ background:skyblue;
 touch-action:none;
 }
 
-#ground{
-position:fixed;
-bottom:0;
-width:100%;
-height:100px;
-background:green;
-}
-
 #player{
 position:absolute;
 left:300px;
@@ -30,21 +22,44 @@ user-select:none;
 -webkit-user-drag:none;
 }
 
-.controls{
+#ground{
 position:fixed;
-bottom:20px;
+bottom:0;
 width:100%;
-text-align:center;
-z-index:999;
+height:100px;
+background:green;
 }
 
 button{
 width:80px;
 height:80px;
 font-size:35px;
-margin:5px;
 touch-action:none;
 user-select:none;
+}
+
+#left{
+position:fixed;
+left:20px;
+bottom:20px;
+}
+
+#right{
+position:fixed;
+left:120px;
+bottom:20px;
+}
+
+#jump{
+position:fixed;
+right:120px;
+bottom:20px;
+}
+
+#kame{
+position:fixed;
+right:20px;
+bottom:20px;
 }
 
 </style>
@@ -52,15 +67,15 @@ user-select:none;
 
 <body>
 
-<img id="player" src="IMG_20260605_165941.jpg">
+<img id="player" src="IMG_20260605_183231.jpg">
 
 <div id="ground"></div>
 
-<div class="controls">
 <button id="left">⬅️</button>
-<button id="jump">⬆️</button>
 <button id="right">➡️</button>
-</div>
+
+<button id="jump">⬆️</button>
+<button id="kame">🔥</button>
 
 <script>
 
@@ -112,10 +127,11 @@ player.style.bottom=y+"px";
 
 if(y<=100){
 
+clearInterval(down);
+
 y=100;
 player.style.bottom=y+"px";
 
-clearInterval(down);
 jumping=false;
 
 }
@@ -134,13 +150,10 @@ if(moving){
 
 x+=direction*5;
 
-if(x<0){
-x=0;
-}
+if(x<0) x=0;
 
-if(x>window.innerWidth-120){
+if(x>window.innerWidth-120)
 x=window.innerWidth-120;
-}
 
 player.style.left=x+"px";
 
@@ -148,16 +161,21 @@ player.style.left=x+"px";
 
 },16);
 
-document.getElementById("left").addEventListener("touchstart",moveLeft);
-document.getElementById("left").addEventListener("touchend",stopMove);
+left.addEventListener("touchstart",moveLeft);
+left.addEventListener("touchend",stopMove);
 
-document.getElementById("right").addEventListener("touchstart",moveRight);
-document.getElementById("right").addEventListener("touchend",stopMove);
+right.addEventListener("touchstart",moveRight);
+right.addEventListener("touchend",stopMove);
 
-document.getElementById("jump").addEventListener("click",jump);
+jump.addEventListener("click",jump);
+
+kame.addEventListener("click",()=>{
+
+alert("🔥 KAMEHAMEHA!");
+
+});
 
 </script>
 
 </body>
 </html>
-
