@@ -1,117 +1,74 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Goku Destroy V1</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
-
 *{
-user-select:none;
--webkit-user-select:none;
--webkit-touch-callout:none;
--webkit-tap-highlight-color:transparent;
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
 }
 
 body{
-margin:0;
-overflow:hidden;
-background:skyblue;
-touch-action:none;
-}
-
-#health{
-position:fixed;
-top:10px;
-left:10px;
-background:red;
-color:white;
-padding:10px;
-border-radius:10px;
-font-weight:bold;
-z-index:999;
-}
-
-#score{
-position:fixed;
-top:10px;
-right:10px;
-background:black;
-color:white;
-padding:10px;
-border-radius:10px;
-font-weight:bold;
-z-index:999;
+  overflow:hidden;
+  background:skyblue;
 }
 
 #ground{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-height:100px;
-background:green;
+  position:fixed;
+  bottom:0;
+  width:100%;
+  height:120px;
+  background:green;
 }
 
 #player{
-position:absolute;
-left:300px;
-bottom:100px;
-width:90px;
-height:120px;
-z-index:10;
+  position:absolute;
+  left:100px;
+  bottom:120px;
+  width:120px;
+}
+
+#leftBox{
+  position:fixed;
+  left:15px;
+  bottom:20px;
+}
+
+#rightBox{
+  position:fixed;
+  right:15px;
+  bottom:20px;
 }
 
 button{
-width:60px;
-height:60px;
-font-size:24px;
-border-radius:12px;
-border:none;
+  width:80px;
+  height:80px;
+  font-size:35px;
+  margin:5px;
 }
-
-#left{
-position:fixed;
-left:15px;
-bottom:120px;
-}
-
-#right{
-position:fixed;
-left:85px;
-bottom:120px;
-}
-
-#jump{
-position:fixed;
-right:85px;
-bottom:120px;
-}
-
-#kame{
-position:fixed;
-right:15px;
-bottom:120px;
-}
-
 </style>
 </head>
 
-<body oncontextmenu="return false;">
+<body oncontextmenu="return false">
 
-<div id="health">❤️ 100</div>
-<div id="score">🏆 0</div>
-
-<img id="player" src="screenshot_165941.jpg">
+<img id="player" src="Screenshot_20260606-204556.jpg">
 
 <div id="ground"></div>
 
-<button id="left">⬅️</button>
-<button id="right">➡️</button>
+<div id="leftBox">
+<button id="left">⬅</button>
+<button id="right">➡</button>
+</div>
 
-<button id="jump">⬆️</button>
-<button id="kame">🔥</button>
+<div id="rightBox">
+<button id="jump">⬆</button>
+<button id="attack">🔥</button>
+</div>
 
 <script>
 
@@ -119,121 +76,66 @@ document.addEventListener("contextmenu",e=>e.preventDefault());
 
 let player=document.getElementById("player");
 
-let x=300;
-let y=100;
-
-let moveLeft=false;
-let moveRight=false;
+let x=100;
+let y=120;
 let jumping=false;
 
-function jump(){
-
-if(jumping) return;
-
-jumping=true;
-
-let up=setInterval(()=>{
-
-y+=10;
-player.style.bottom=y+"px";
-
-if(y>=250){
-
-clearInterval(up);
-
-let down=setInterval(()=>{
-
-y-=10;
-player.style.bottom=y+"px";
-
-if(y<=100){
-
-y=100;
-player.style.bottom=y+"px";
-
-clearInterval(down);
-
-jumping=false;
-
+function updatePlayer(){
+  player.style.left=x+"px";
+  player.style.bottom=y+"px";
 }
 
-},20);
+document.getElementById("left").onclick=()=>{
+  x=Math.max(0,x-30);
+  updatePlayer();
+};
 
-}
+document.getElementById("right").onclick=()=>{
+  x=Math.min(window.innerWidth-120,x+30);
+  updatePlayer();
+};
 
-},20);
+document.getElementById("jump").onclick=()=>{
 
-}
+  if(jumping) return;
 
-setInterval(()=>{
+  jumping=true;
 
-if(moveLeft){
+  let up=setInterval(()=>{
 
-x-=5;
+    y+=10;
+    updatePlayer();
 
-if(x<0){
-x=0;
-}
+    if(y>=260){
 
-player.style.left=x+"px";
+      clearInterval(up);
 
-}
+      let down=setInterval(()=>{
 
-if(moveRight){
+        y-=10;
+        updatePlayer();
 
-x+=5;
+        if(y<=120){
+          y=120;
+          jumping=false;
+          clearInterval(down);
+        }
 
-if(x>window.innerWidth-90){
-x=window.innerWidth-90;
-}
+      },20);
 
-player.style.left=x+"px";
+    }
 
-}
+  },20);
 
-},16);
+};
 
-document.getElementById("left").addEventListener("touchstart",()=>{
+document.getElementById("attack").onclick=()=>{
+  alert("KAMEHAMEHA!");
+};
 
-moveLeft=true;
-
-});
-
-document.getElementById("left").addEventListener("touchend",()=>{
-
-moveLeft=false;
-
-});
-
-document.getElementById("right").addEventListener("touchstart",()=>{
-
-moveRight=true;
-
-});
-
-document.getElementById("right").addEventListener("touchend",()=>{
-
-moveRight=false;
-
-});
-
-document.getElementById("jump").addEventListener("touchstart",jump);
-
-document.getElementById("kame").addEventListener("touchstart",()=>{
-
-alert("🔥 KAMEHAMEHA!");
-
-});
-
-document.addEventListener("touchend",()=>{
-
-moveLeft=false;
-moveRight=false;
-
-});
+updatePlayer();
 
 </script>
 
 </body>
 </html>
-
