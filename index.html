@@ -4,53 +4,57 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
 <style>
+
 *{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  user-select:none;
-  -webkit-user-select:none;
-  touch-action:none;
+margin:0;
+padding:0;
+box-sizing:border-box;
+user-select:none;
+-webkit-user-select:none;
+touch-action:none;
 }
 
 body{
-  overflow:hidden;
-  background:skyblue;
+overflow:hidden;
+background:skyblue;
 }
 
 #ground{
-  position:fixed;
-  bottom:0;
-  width:100%;
-  height:120px;
-  background:green;
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+height:120px;
+background:green;
 }
 
 #player{
-  position:absolute;
-  left:100px;
-  bottom:120px;
-  width:120px;
+position:absolute;
+left:100px;
+bottom:120px;
+width:120px;
+height:auto;
 }
 
-#leftBox{
-  position:fixed;
-  left:15px;
-  bottom:20px;
+#leftControls{
+position:fixed;
+left:20px;
+bottom:20px;
 }
 
-#rightBox{
-  position:fixed;
-  right:15px;
-  bottom:20px;
+#rightControls{
+position:fixed;
+right:20px;
+bottom:20px;
 }
 
 button{
-  width:80px;
-  height:80px;
-  font-size:35px;
-  margin:5px;
+width:80px;
+height:80px;
+font-size:35px;
+margin:5px;
 }
+
 </style>
 </head>
 
@@ -60,77 +64,137 @@ button{
 
 <div id="ground"></div>
 
-<div id="leftBox">
+<div id="leftControls">
 <button id="left">⬅</button>
 <button id="right">➡</button>
 </div>
 
-<div id="rightBox">
+<div id="rightControls">
 <button id="jump">⬆</button>
 <button id="attack">🔥</button>
 </div>
 
 <script>
 
-document.addEventListener("contextmenu",e=>e.preventDefault());
-
 let player=document.getElementById("player");
 
 let x=100;
 let y=120;
+
+let moveLeft=false;
+let moveRight=false;
 let jumping=false;
 
 function updatePlayer(){
-  player.style.left=x+"px";
-  player.style.bottom=y+"px";
+player.style.left=x+"px";
+player.style.bottom=y+"px";
 }
 
-document.getElementById("left").onclick=()=>{
-  x=Math.max(0,x-30);
-  updatePlayer();
+document.getElementById("left").ontouchstart=()=>{
+moveLeft=true;
 };
 
-document.getElementById("right").onclick=()=>{
-  x=Math.min(window.innerWidth-120,x+30);
-  updatePlayer();
+document.getElementById("left").ontouchend=()=>{
+moveLeft=false;
 };
+
+document.getElementById("right").ontouchstart=()=>{
+moveRight=true;
+};
+
+document.getElementById("right").ontouchend=()=>{
+moveRight=false;
+};
+
+setInterval(()=>{
+
+if(moveLeft){
+x-=5;
+}
+
+if(moveRight){
+x+=5;
+}
+
+if(x<0){
+x=0;
+}
+
+if(x>window.innerWidth-120){
+x=window.innerWidth-120;
+}
+
+updatePlayer();
+
+},16);
 
 document.getElementById("jump").onclick=()=>{
 
-  if(jumping) return;
+if(jumping) return;
 
-  jumping=true;
+jumping=true;
 
-  let up=setInterval(()=>{
+let up=setInterval(()=>{
 
-    y+=10;
-    updatePlayer();
+y+=8;
+updatePlayer();
 
-    if(y>=260){
+if(y>=260){
 
-      clearInterval(up);
+clearInterval(up);
 
-      let down=setInterval(()=>{
+let down=setInterval(()=>{
 
-        y-=10;
-        updatePlayer();
+y-=8;
+updatePlayer();
 
-        if(y<=120){
-          y=120;
-          jumping=false;
-          clearInterval(down);
-        }
+if(y<=120){
 
-      },20);
+y=120;
+jumping=false;
 
-    }
+clearInterval(down);
 
-  },20);
+}
+
+},16);
+
+}
+
+},16);
 
 };
 
 document.getElementById("attack").onclick=()=>{
-  alert("KAMEHAMEHA!");
+
+let blast=document.createElement("div");
+
+blast.innerHTML="💥";
+
+blast.style.position="absolute";
+blast.style.left=(x+100)+"px";
+blast.style.bottom=(y+50)+"px";
+blast.style.fontSize="40px";
+
+document.body.appendChild(blast);
+
+let bx=x+100;
+
+let move=setInterval(()=>{
+
+bx+=15;
+
+blast.style.left=bx+"px";
+
+if(bx>window.innerWidth){
+
+clearInterval(move);
+blast.remove();
+
+}
+
+},16);
+
 };
 
 updatePlayer();
