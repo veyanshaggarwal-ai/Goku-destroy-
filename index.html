@@ -38,7 +38,18 @@ bottom:100px;
 width:100px;
 height:auto;
 }
-
+  
+#score{
+position:fixed;
+top:10px;
+left:10px;
+background:black;
+color:white;
+padding:10px;
+border-radius:10px;
+color:white;
+}
+  
 button{
 width:60px;
 height:60px;
@@ -77,7 +88,7 @@ bottom:120px;
 <body oncontextmenu="return false;">
 
 <img id="player" src="Screenshot_20260606-204556.jpg">
-
+<div id="score">🏆 0</div>
 <div id="ground"></div>
 
 <button id="left">⬅️</button>
@@ -134,12 +145,16 @@ document.getElementById("attack").ontouchstart=()=>{
 
 let beam=document.createElement("div");
 
-beam.innerHTML="💥";
-
 beam.style.position="absolute";
 beam.style.left=(x+80)+"px";
 beam.style.bottom=(y+50)+"px";
-beam.style.fontSize="40px";
+
+beam.style.width="30px";
+beam.style.height="15px";
+
+beam.style.background="cyan";
+beam.style.borderRadius="20px";
+beam.style.boxShadow="0 0 20px cyan";
 
 document.body.appendChild(beam);
 
@@ -148,6 +163,7 @@ let bx=x+80;
 let move=setInterval(()=>{
 
 bx+=15;
+
 beam.style.left=bx+"px";
 
 if(bx>window.innerWidth){
